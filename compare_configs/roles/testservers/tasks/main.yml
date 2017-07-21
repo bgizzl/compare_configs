@@ -1,0 +1,15 @@
+---
+#設定ファイルを作成し、virlogに送信する
+#送信元ファイルPath:/tmp/[hostname]-config.txt
+#送信先ファイルPath:/var/log/ansible-compare-configs/[hostname]/[hostname]-[yyyymmdd]-config.txt
+
+ - name: 設定ファイルの作成
+   script: /etc/ansible/compare_configs/create-config.sh
+
+ - name: 設定ファイルの送信
+   vars:
+     date: "{{ lookup('pipe','date +%Y%m%d') }}"
+   fetch: src=/tmp/{{inventory_hostname}}-config.txt dest=/var/log/ansible-compare-configs/{{inventory_hostname}}/{{inventory_hostname}}-{{ date }}-config.txt flat=yes
+
+ - name: 送信元の設定ファイルの削除
+   file: path=/tmp/{{inventory_hostname}}-config.txt state=absent

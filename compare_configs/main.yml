@@ -1,0 +1,12 @@
+---
+##これはメインのプレイブックです
+
+- name: create config files from testservers
+  hosts: testservers
+  remote_user: root
+  become: yes
+  become_user: root
+  gather_facts: false
+  
+  roles:
+    - testservers
